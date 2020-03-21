@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>myagents</artifactId>
+        <groupId>com.test.myagents</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>agent_use</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.0-GA</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>agent_use</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- 指定Main方法入口的class -->
+                            <mainClass>com.test.agent.myagent_assient.MyAgent</mainClass>
+                            <!-- 在jar包的MANIFEST.MF文件中生成Class-Path属性 -->
+                            <addClasspath>true</addClasspath>
+                            <!-- Class-Path 前缀 -->
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                        <!-- 把本地的第三方jar包添加到MANIFEST.MF文件中,可以解压打包后的jar包查看MANIFEST.MF文件 -->
+                        <!--
+                        Class-Path: 指定当前jar包执行所依赖的classpath,包括本地的第三方jar包和maven引入的jar包
+                        Class-Path: lib/slf4j-api-1.7.13.jar lib/junit-3.8.1.jar
+                        Main-Class: 指定当前jar包的入口class
+                        Main-Class: com.birdben.App
+                        -->
+                        <manifestEntries>
+                            <Premain-Class>MyAgent</Premain-Class>
+                            <Agent-Class>MyAgent</Agent-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- 拷贝依赖的jar包到lib目录 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!-- ${project.build.directory} 构建目录，缺省为target -->
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>7</source>
+                    <target>7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
