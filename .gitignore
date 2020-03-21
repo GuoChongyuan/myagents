@@ -36,3 +36,4 @@ Thumbs.db
 # pods ignore
 Pods/
 .idea/
+/agent_bind/pom.xml
