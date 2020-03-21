@@ -27,13 +27,12 @@ target/
 Thumbs.db
 
 # package ignore (optional)
-# *.jar
-# *.war
-# *.zip
-# *.tar
-# *.tar.gz
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
 
 # pods ignore
 Pods/
 .idea/
-/agent_bind/pom.xml
